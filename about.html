@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | RacketRank</title>
+    <meta name="description"
+        content="Learn about RacketRank's mission to revolutionize racket sports through technology and community.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .about-content {
+            padding: 160px 0 100px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-content h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .about-content h2 {
+            font-size: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .mission-card {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 20px;
+            border: var(--glass-border);
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 968px) {
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ball.png" alt="Tennis Ball" style="width: 32px; height: 32px;">
+                Racket<span>Rank</span>
+            </a>
+            <div class="nav-links">
+                <a href="features.html">Features</a>
+                <a href="community.html">Community</a>
+                <a href="rankings.html">Rankings</a>
+                <a href="download.html">Download</a>
+            </div>
+            <a href="download.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <div class="container about-content">
+        <h1>About RacketRank</h1>
+        <p style="text-align: center; font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem;">We're on a mission to
+            revolutionize racket sports through technology, community, and fair competition.</p>
+
+        <div class="mission-card">
+            <h2 style="margin-top: 0; color: var(--primary);">Our Mission</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto;">To empower every racket sports player with
+                the tools and community they need to track their progress, find great matches, and achieve their full
+                potential on the court.</p>
+        </div>
+
+        <h2>Our Story</h2>
+        <p>RacketRank was born from a simple frustration: finding competitive matches and tracking progress in racket
+            sports was unnecessarily difficult. As passionate tennis players ourselves, we knew there had to be a better
+            way.</p>
+
+        <p>In 2023, we set out to build the platform we wished existed—one that would make it easy to find opponents,
+            track rankings, and connect with the global tennis community. What started as a side project quickly grew
+            into a movement, with thousands of players joining our platform in the first year.</p>
+
+        <p>Today, RacketRank serves over 10,000 active players across 50+ countries, facilitating tens of thousands of
+            matches every month. But we're just getting started.</p>
+
+        <h2>Our Values</h2>
+        <div class="values-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h3>Player-First</h3>
+                <p>Every decision we make is guided by what's best for our players and the community.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <h3>Fair Play</h3>
+                <p>We're committed to maintaining a fair, transparent, and trustworthy ranking system.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <h3>Innovation</h3>
+                <p>We continuously improve our platform with cutting-edge features and technology.</p>
+            </div>
+        </div>
+
+        <h2>What We Believe</h2>
+        <p>We believe that racket sports should be accessible to everyone, regardless of skill level or location. We
+            believe in the power of community to motivate, inspire, and push players to new heights. And we believe that
+            technology, when done right, can enhance the joy of competition without taking away from the game itself.
+        </p>
+
+        <p>Most importantly, we believe that every player deserves a fair shot at tracking their progress and finding
+            great matches. That's why RacketRank will always be free to use, with no paywalls blocking core features.
+        </p>
+
+        <h2>Join Us</h2>
+        <p>Whether you're a casual player looking for weekend matches or a competitive athlete chasing rankings,
+            RacketRank is built for you. Join our growing community and see why thousands of players trust us to power
+            their tennis journey.</p>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-card">
+                <div style="position: relative; z-index: 2;">
+                    <h2>Ready to Join the Movement?</h2>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Download RacketRank today and
+                        become part of the future of racket sports.</p>
+                    <a href="download.html" class="btn btn-primary">Get Started Free</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="assets/ball.png" alt="Tennis Ball" style="width: 28px; height: 28px;">
+                        Racket<span>Rank</span>
+                    </a>
+                    <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="rankings.html">Rankings</a></li>
+                        <li><a href="download.html">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="cookies.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 RacketRank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

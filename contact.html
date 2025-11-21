@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | RacketRank</title>
+    <meta name="description"
+        content="Get in touch with the RacketRank team. We're here to help with any questions or feedback.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-content {
+            padding: 160px 0 100px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-content h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: var(--glass-border);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(204, 255, 0, 0.15);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ball.png" alt="Tennis Ball" style="width: 32px; height: 32px;">
+                Racket<span>Rank</span>
+            </a>
+            <div class="nav-links">
+                <a href="features.html">Features</a>
+                <a href="community.html">Community</a>
+                <a href="rankings.html">Rankings</a>
+                <a href="download.html">Download</a>
+            </div>
+            <a href="download.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <div class="container contact-content">
+        <h1>Get in Touch</h1>
+        <p
+            style="text-align: center; font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem; color: var(--text-muted);">
+            Have questions, feedback, or need support? We'd love to hear from you. Our team is here to help.</p>
+
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <h3>Email Support</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">For general inquiries and support</p>
+                <a href="mailto:support@racketrank.app"
+                    style="color: var(--primary); font-weight: 600;">support@racketrank.app</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fa-solid fa-bug"></i>
+                </div>
+                <h3>Report a Bug</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Found a technical issue?</p>
+                <a href="mailto:bugs@racketrank.app"
+                    style="color: var(--primary); font-weight: 600;">bugs@racketrank.app</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <h3>Feature Requests</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Share your ideas with us</p>
+                <a href="mailto:feedback@racketrank.app"
+                    style="color: var(--primary); font-weight: 600;">feedback@racketrank.app</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <h3>Business Inquiries</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Partnerships and collaborations</p>
+                <a href="mailto:business@racketrank.app"
+                    style="color: var(--primary); font-weight: 600;">business@racketrank.app</a>
+            </div>
+        </div>
+
+        <div class="feature-card" style="margin-top: 3rem; text-align: center;">
+            <h2 style="margin-bottom: 1rem;">Frequently Asked Questions</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Before reaching out, check if your question is
+                answered in our FAQ.</p>
+            <a href="https://racketrank.app/" class="btn btn-outline">View FAQ</a>
+        </div>
+
+        <div style="margin-top: 4rem; text-align: center;">
+            <h2 style="margin-bottom: 1rem;">Response Time</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">We typically respond to all inquiries
+                within 24-48 hours during business days. For urgent issues, please mark your email as "URGENT" in the
+                subject line.</p>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-card">
+                <div style="position: relative; z-index: 2;">
+                    <h2>Join Our Community</h2>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Connect with other players,
+                        share tips, and stay updated on the latest RacketRank news.</p>
+                    <a href="download.html" class="btn btn-primary">Download Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="assets/ball.png" alt="Tennis Ball" style="width: 28px; height: 28px;">
+                        Racket<span>Rank</span>
+                    </a>
+                    <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="rankings.html">Rankings</a></li>
+                        <li><a href="download.html">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="cookies.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RacketRank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

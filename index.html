@@ -1,109 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal - RacketRank</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 60px 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-        h1 {
-            color: #007AFF;
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 40px;
-        }
-        .links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 40px 0;
-        }
-        .link-card {
-            background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
-            color: white;
-            padding: 30px 40px;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            min-width: 200px;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-        }
-        .link-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
-        }
-        .link-card h2 {
-            margin: 0 0 10px 0;
-            font-size: 24px;
-        }
-        .link-card p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        .footer {
-            margin-top: 40px;
-            color: #666;
-            font-size: 14px;
-        }
-        .emoji {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>RacketRank | Elevate Your Game</title>
+    <meta name="description"
+        content="The ultimate platform for racket sports enthusiasts. Track rankings, find matches, and join the global community.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <div class="emoji">🎾</div>
-        <h1>RacketRank</h1>
-        <p class="subtitle">Legal Documents</p>
 
-        <div class="links">
-            <a href="privacy.html" class="link-card">
-                <h2>🔒 Privacy Policy</h2>
-                <p>How we handle your data</p>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ball.png" alt="Tennis Ball" style="width: 32px; height: 32px;">
+                Racket<span>Rank</span>
             </a>
-            
-            <a href="terms.html" class="link-card">
-                <h2>📜 Terms of Service</h2>
-                <p>Rules and guidelines</p>
-            </a>
+            <div class="nav-links">
+                <a href="features.html">Features</a>
+                <a href="community.html">Community</a>
+                <a href="rankings.html">Rankings</a>
+                <a href="download.html">Download</a>
+            </div>
+            <a href="download.html" class="btn btn-primary">Get Started</a>
         </div>
+    </nav>
 
-        <div class="footer">
-            <p><strong>Last Updated:</strong> January 2025</p>
-            <p>© 2025 RacketRank. All rights reserved.</p>
-            <p style="margin-top: 20px;">
-                <strong>Contact:</strong> 
-                <a href="mailto:info@racketrank.app" style="color: #007AFF;">info@racketrank.app</a> or 
-                <a href="mailto:ozdorukberk@gmail.com" style="color: #007AFF;">ozdorukberk@gmail.com</a>
-            </p>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <span class="hero-tag">New Season Live</span>
+                    <h1>Dominate the Court. <br>Track Your Glory.</h1>
+                    <p>Join the world's fastest-growing community for racket sports. Real-time rankings, smart
+                        matchmaking, and tournament management all in one premium app.</p>
+                    <div class="hero-buttons">
+                        <a href="download.html" class="btn btn-outline"><i class="fa-brands fa-apple"></i> Download
+                            iOS</a>
+                        <a href="download.html" class="btn btn-outline"><i class="fa-brands fa-android"></i> Download
+                            Android</a>
+                    </div>
+
+                    <div style="margin-top: 3rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="display: flex; margin-left: 10px;">
+                            <img src="assets/pp1.jpg" alt="Player"
+                                style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #ff6b35;">
+                            <img src="assets/pp2.jpg" alt="Player"
+                                style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #ff8555; margin-left: -18px;">
+                            <img src="assets/pp3.jpg" alt="Player"
+                                style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #ffa500; margin-left: -18px;">
+                        </div>
+                        <p style="margin: 0; font-size: 0.9rem;">Trusted by <strong>10,000+</strong> players</p>
+                    </div>
+                </div>
+                <div class="hero-image" style="display: flex; justify-content: center; align-items: center;">
+                    <img src="assets/applogo.png" alt="RacketRank App Logo"
+                        style="max-width: 300px; border: none; box-shadow: none; animation: float 6s ease-in-out infinite;">
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>10k+</h3>
+                    <p>Active Players</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50k+</h3>
+                    <p>Matches Recorded</p>
+                </div>
+                <div class="stat-item">
+                    <h3>500+</h3>
+                    <p>Clubs & Leagues</p>
+                </div>
+                <div class="stat-item">
+                    <h3>4.9/5</h3>
+                    <p>App Store Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span style="color: var(--primary); font-weight: 600;">WHY RACKETRANK?</span>
+                <h2>Everything you need to level up</h2>
+                <p>We've built the ultimate toolkit for the modern player. Focus on your game, we'll handle the stats.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3>Global Rankings</h3>
+                    <p>See where you stand locally and globally. Climb the ladder and earn badges for your achievements.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h3>Smart Matchmaking</h3>
+                    <p>Find opponents at your skill level instantly. Our algorithm ensures fair and competitive matches
+                        every time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3>Performance Analytics</h3>
+                    <p>Deep dive into your match history. Track win rates, set goals, and visualize your improvement
+                        over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="download" class="cta">
+        <div class="container">
+            <div class="cta-card">
+                <div style="position: relative; z-index: 2;">
+                    <h2>Ready to take the lead?</h2>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Join thousands of players who
+                        are already tracking their progress and finding better matches with RacketRank.</p>
+                    <a href="download.html" class="btn btn-primary">Download for Free</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="assets/ball.png" alt="Tennis Ball" style="width: 28px; height: 28px;">
+                        Racket<span>Rank</span>
+                    </a>
+                    <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="rankings.html">Rankings</a></li>
+                        <li><a href="download.html">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="community.html">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="cookies.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 RacketRank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
 </body>
-</html>
 
+</html>
