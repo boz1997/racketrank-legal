@@ -1,0 +1,19 @@
+# Supabase Configuration (contains sensitive API keys)
+config.js
+
+# Environment files
+.env
+.env.local
+backend/.env
+backend/.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+

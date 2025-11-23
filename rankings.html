@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rankings | RacketRank</title>
-    <meta name="description" content="Learn how RacketRank's fair and transparent ranking system works.">
+    <meta name="description" content="View local and global rankings. See where you stand in your district, city, and country.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,73 +18,323 @@
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     <style>
-        .rankings-content {
-            padding: 160px 1.5rem 100px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .rankings-content {
-                padding: 160px 1.25rem 100px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .rankings-content {
-                padding: 160px 1rem 100px;
-            }
-        }
-
-        .rankings-content h1 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
+        .rankings-hero {
+            padding: 180px 0 80px;
             text-align: center;
         }
 
-        .rankings-content h2 {
-            font-size: 2rem;
-            margin-top: 3rem;
+        .rankings-hero h1 {
             margin-bottom: 1rem;
-            color: #fff;
         }
 
-        .rankings-content h3 {
-            font-size: 1.5rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
+        .rankings-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
         }
 
-        .rankings-content p,
-        .rankings-content ul {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-
-        .rankings-content ul {
-            padding-left: 1.5rem;
-            list-style-type: disc;
-        }
-
-        .rankings-content li {
-            margin-bottom: 0.8rem;
-        }
-
-        .ranking-example {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 20px;
-            border: var(--glass-border);
+        .location-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
             margin: 2rem 0;
         }
 
-        .ranking-example h4 {
+        .location-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .location-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .location-btn.active {
+            background: rgba(204, 255, 0, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .location-info {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .location-info p {
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .location-info .location-name {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-section {
+            padding: 10px 0 10px;
+        }
+
+        .leaderboard-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .leaderboard-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(204, 255, 0, 0.2);
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--glass-border);
+        }
+
+        .leaderboard-header h2 {
+            font-size: 1.75rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .leaderboard-header .update-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-header .update-info i {
+            color: var(--primary);
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .leaderboard-item {
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: var(--glass-border);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .leaderboard-item:hover {
+            background: var(--bg-card-hover);
+            transform: translateX(5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(204, 255, 0, 0.2);
+        }
+
+        .rank-number {
+            font-weight: 800;
+            font-size: 2rem;
+            line-height: 1;
+            flex-shrink: 0;
+            min-width: 60px;
+        }
+
+        .rank-number.rank-1 {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .rank-number.rank-2 {
+            color: #c0c0c0;
+            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+        }
+
+        .rank-number.rank-3 {
+            color: #cd7f32;
+            text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+        }
+
+        .rank-number.rank-other {
+            color: var(--text-muted);
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .player-avatar,
+        .player-avatar-default {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid rgba(204, 255, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(204, 255, 0, 0.2);
+        }
+
+        .player-avatar-default {
+            background: rgba(204, 255, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.15rem;
+        }
+
+        .player-rating {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            min-width: 100px;
+            text-align: right;
+        }
+
+
+        .loading-state,
+        .error-state,
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .loading-state i,
+        .error-state i,
+        .empty-state i {
+            font-size: 3rem;
             color: var(--primary);
             margin-bottom: 1rem;
-            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        .loading-state p,
+        .error-state p,
+        .empty-state p {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .error-state .retry-btn {
+            margin-top: 1.5rem;
+            padding: 0.75rem 2rem;
+            background: var(--primary);
+            color: #1a1d23;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .error-state .retry-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .rankings-hero {
+                padding: 140px 0 60px;
+            }
+
+            .location-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .location-btn {
+                width: 100%;
+            }
+
+            .leaderboard-card {
+                padding: 1.5rem;
+            }
+
+            .leaderboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .leaderboard-table {
+                font-size: 0.9rem;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            .rankings-hero {
+                padding: 120px 0 40px;
+            }
+
+            .leaderboard-item {
+                padding: 1rem 1.25rem;
+                gap: 1rem;
+            }
+
+            .rank-number {
+                font-size: 1.5rem;
+                min-width: 40px;
+            }
+
+            .player-avatar,
+            .player-avatar-default {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1rem;
+            }
+
+            .player-name {
+                font-size: 1rem;
+            }
+
+            .player-rating {
+                font-size: 1.2rem;
+                min-width: 70px;
+            }
         }
     </style>
 </head>
@@ -109,58 +359,57 @@
         </div>
     </nav>
 
-    <div class="container rankings-content">
-        <h1>How Rankings Work</h1>
-        <p style="text-align: center; font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem;">RacketRank uses a
-            sophisticated custom rating system to ensure fair and accurate player rankings. Here's everything you need
-            to know.</p>
+    <!-- Rankings Hero -->
+    <header class="rankings-hero">
+        <div class="container">
+            <h1>Global Rankings</h1>
+            <p>See where you stand among players in your district, city, and country. Rankings update automatically to reflect the latest match results.</p>
+            
+            <div class="location-selector">
+                <button class="location-btn active" data-level="district" id="districtBtn">
+                    <i class="fa-solid fa-map-marker-alt"></i> <span class="btn-location-name">District</span>
+                </button>
+                <button class="location-btn" data-level="city" id="cityBtn">
+                    <i class="fa-solid fa-city"></i> <span class="btn-location-name">City</span>
+                </button>
+                <button class="location-btn" data-level="country" id="countryBtn">
+                    <i class="fa-solid fa-globe"></i> <span class="btn-location-name">Country</span>
+                </button>
+            </div>
 
-        <h2>The RacketRank Ranking System</h2>
-        <p>Our ranking system is designed specifically for racket sports, taking into account match outcomes, opponent
-            strength, and competitive balance. Every player earns their own unique ranking position that reflects their true skill
-            level.</p>
-
-        <h3>How Rankings Change</h3>
-        <p>When you play a match, your ranking position changes based on:</p>
-        <ul>
-            <li><strong>The match outcome</strong> - Win, lose, or draw</li>
-            <li><strong>Your opponent's ranking</strong> - Beating higher-ranked players improves your position more</li>
-            <li><strong>The ranking difference</strong> - Larger gaps result in bigger position changes</li>
-            <li><strong>Match importance</strong> - Tournament matches may carry additional weight</li>
-        </ul>
-
-        <div class="ranking-example">
-            <h4>Example Scenario</h4>
-            <p><strong>Player A (Higher Ranked)</strong> vs <strong>Player B (Lower Ranked)</strong></p>
-            <p>If Player A wins: Maintains or slightly improves position (expected outcome)<br>
-                If Player B wins: Significant ranking improvement (upset victory)</p>
+            
         </div>
+    </header>
 
-        <h3>Play for the Lead</h3>
-        <p>RacketRank isn't just about tracking stats—it's about climbing to the top. Compete for:</p>
-        <ul>
-            <li><strong>Platinum Badge</strong> - Top tier ranking</li>
-            <li><strong>Diamond Badge</strong> - Elite ranking</li>
-        </ul>
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section">
+        <div class="container">
+            <div class="leaderboard-card">
+                <div class="leaderboard-header">
+                    <h2 id="leaderboardTitle">District Rankings</h2>
+                    <div class="update-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="lastUpdate">Loading...</span>
+                    </div>
+                </div>
 
-        <h2>Fair Play Guarantee</h2>
-        <p>We take ranking integrity seriously. Our system includes:</p>
-        <ul>
-            <li>Anti-fraud detection algorithms</li>
-            <li>Manual review of suspicious activity</li>
-            <li>Community reporting tools</li>
-            <li>Transparent rating calculations</li>
-        </ul>
-    </div>
+                <div id="leaderboardContent">
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Loading rankings...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- CTA Section -->
     <section class="cta">
         <div class="container">
             <div class="cta-card">
                 <div style="position: relative; z-index: 2;">
-                    <h2>Start Your Climb Today</h2>
-                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Join RacketRank and see where
-                        you stand among players worldwide.</p>
+                    <h2>Join the Competition</h2>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Download RacketRank and start climbing the leaderboard today.</p>
                     <a href="download.html" class="btn btn-primary">Download Now</a>
                 </div>
             </div>
@@ -210,6 +459,21 @@
         </div>
     </footer>
 
+    <!-- Backend API Configuration -->
+    <script>
+        // Auto-detect API URL based on environment
+        // Local development: http://localhost:3000
+        // Production: Use same domain (Vercel handles this)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.API_BASE_URL = 'http://localhost:3000';
+        } else {
+            // Production: Use same origin (Vercel will serve both frontend and API)
+            window.API_BASE_URL = window.location.origin;
+        }
+    </script>
+    
+    <!-- Rankings Script -->
+    <script src="rankings.js"></script>
 
 </body>
 
