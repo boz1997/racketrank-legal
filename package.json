@@ -1,0 +1,12 @@
+{
+  "name": "racketrank-legal",
+  "version": "1.0.0",
+  "description": "RacketRank Legal Website",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
+
