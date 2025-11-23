@@ -44,8 +44,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(26, 29, 35, 0.85);
-    backdrop-filter: blur(1.5px);
+    background: rgba(26, 29, 35, 0.7);
+    backdrop-filter: blur(0.5px);
     z-index: -1;
 }
 
@@ -100,7 +100,7 @@ p {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 2.5rem;
 }
 
 .text-center {
@@ -208,6 +208,7 @@ p {
 .hero-content {
     position: relative;
     z-index: 2;
+    margin-top: 1rem;
 }
 
 .hero-tag {
@@ -446,6 +447,7 @@ p {
     }
 
     .hero-content {
+        margin-top: 1.5rem;
         margin-bottom: 0.5rem;
     }
 
@@ -477,22 +479,19 @@ p {
     }
 
     .nav-links {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .nav-links a {
-        font-size: 0.9rem;
+        display: none;
     }
 
     .container {
-        padding: 0 1.5rem;
+        padding: 0 2rem;
     }
 
     /* Mobile background fix */
     body {
         background-attachment: scroll;
+        background-image: url('assets/bg4.jpg');
+        background-size: cover;
+        background-position: center;
     }
 
     /* Mobile padding improvements */
@@ -551,6 +550,7 @@ p {
     }
 
     .hero-content {
+        margin-top: 1.5rem;
         margin-bottom: 0.5rem;
     }
 
@@ -596,7 +596,7 @@ p {
     }
 
     .container {
-        padding: 0 1.25rem;
+        padding: 0 1.5rem;
     }
 
     /* Extra padding for mobile content */
@@ -656,6 +656,7 @@ p {
     }
 
     .hero-content {
+        margin-top: 1rem;
         margin-bottom: 0.25rem;
     }
 
@@ -693,6 +694,6 @@ p {
     }
 
     .container {
-        padding: 0 1rem;
+        padding: 0 1.25rem;
     }
 }
