@@ -19,9 +19,21 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .rankings-content {
-            padding: 160px 0 100px;
+            padding: 160px 1.5rem 100px;
             max-width: 900px;
             margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .rankings-content {
+                padding: 160px 1.25rem 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rankings-content {
+                padding: 160px 1rem 100px;
+            }
         }
 
         .rankings-content h1 {
@@ -90,6 +102,7 @@
                 <a href="features.html">Features</a>
                 <a href="community.html">Community</a>
                 <a href="rankings.html" style="color: var(--primary);">Rankings</a>
+                <a href="pricing.html">Pricing</a>
                 <a href="download.html">Download</a>
             </div>
             <a href="download.html" class="btn btn-primary">Get Started</a>
@@ -102,32 +115,32 @@
             sophisticated custom rating system to ensure fair and accurate player rankings. Here's everything you need
             to know.</p>
 
-        <h2>The RacketRank Rating System</h2>
+        <h2>The RacketRank Ranking System</h2>
         <p>Our ranking system is designed specifically for racket sports, taking into account match outcomes, opponent
-            strength, and competitive balance. Every player earns their own unique score that reflects their true skill
+            strength, and competitive balance. Every player earns their own unique ranking position that reflects their true skill
             level.</p>
 
-        <h3>How Ratings Change</h3>
-        <p>When you play a match, your rating changes based on:</p>
+        <h3>How Rankings Change</h3>
+        <p>When you play a match, your ranking position changes based on:</p>
         <ul>
             <li><strong>The match outcome</strong> - Win, lose, or draw</li>
-            <li><strong>Your opponent's rating</strong> - Beating higher-rated players earns more points</li>
-            <li><strong>The rating difference</strong> - Larger gaps result in bigger swings</li>
+            <li><strong>Your opponent's ranking</strong> - Beating higher-ranked players improves your position more</li>
+            <li><strong>The ranking difference</strong> - Larger gaps result in bigger position changes</li>
             <li><strong>Match importance</strong> - Tournament matches may carry additional weight</li>
         </ul>
 
         <div class="ranking-example">
             <h4>Example Scenario</h4>
-            <p><strong>Player A (Rating: 1200)</strong> vs <strong>Player B (Rating: 1000)</strong></p>
-            <p>If Player A wins: +10 points (expected outcome)<br>
-                If Player B wins: +30 points (upset victory)</p>
+            <p><strong>Player A (Higher Ranked)</strong> vs <strong>Player B (Lower Ranked)</strong></p>
+            <p>If Player A wins: Maintains or slightly improves position (expected outcome)<br>
+                If Player B wins: Significant ranking improvement (upset victory)</p>
         </div>
 
         <h3>Play for the Lead</h3>
         <p>RacketRank isn't just about tracking stats—it's about climbing to the top. Compete for:</p>
         <ul>
-            <li><strong>Platinum Badge</strong> - 1600-1799 rating</li>
-            <li><strong>Diamond Badge</strong> - 1800+ rating</li>
+            <li><strong>Platinum Badge</strong> - Top tier ranking</li>
+            <li><strong>Diamond Badge</strong> - Elite ranking</li>
         </ul>
 
         <h2>Fair Play Guarantee</h2>
@@ -170,6 +183,7 @@
                     <ul>
                         <li><a href="features.html">Features</a></li>
                         <li><a href="rankings.html">Rankings</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
                         <li><a href="download.html">Download</a></li>
                     </ul>
                 </div>
@@ -195,6 +209,7 @@
             </div>
         </div>
     </footer>
+
 
 </body>
 
