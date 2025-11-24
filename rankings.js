@@ -4,6 +4,12 @@
 // Backend API URL
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
 
+// Shared storage keys so we can hydrate from background prefetches
+const PREFETCH_STORAGE_KEY = 'rr_rankings_prefetch_v1';
+const PREFETCH_COUNTRY_KEY = 'rr_rankings_country_v1';
+const LOCATION_CACHE_KEY = 'rr_location_cache_v1';
+const LOCATION_TTL = 60 * 60 * 1000; // 1 hour
+
 // Normalize country names to handle variants
 function normalizeCountryName(countryName) {
     if (!countryName) return null;
@@ -97,13 +103,61 @@ let leaderboardCache = {
     country: null
 };
 
+function getCachedLocation() {
+    if (window.__prefetchedLocation) {
+        return window.__prefetchedLocation;
+    }
+    try {
+        const raw = localStorage.getItem(LOCATION_CACHE_KEY);
+        if (!raw) {
+            return null;
+        }
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.timestamp) {
+            return null;
+        }
+        if (Date.now() - parsed.timestamp > LOCATION_TTL) {
+            return null;
+        }
+        window.__prefetchedLocation = parsed;
+        return parsed;
+    } catch (error) {
+        console.warn('Unable to read cached location:', error);
+        return null;
+    }
+}
+
+function storeLocationCache(payload) {
+    const extended = {
+        ...payload,
+        timestamp: Date.now()
+    };
+    try {
+        localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(extended));
+    } catch (error) {
+        console.warn('Unable to cache location:', error);
+    }
+    window.__prefetchedLocation = extended;
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    // Get user location
-    await getUserLocation();
+    // Hydrate from any background prefetch to avoid showing an empty state
+    hydrateFromPrefetch();
 
-    // Load initial leaderboard
-    await loadLeaderboard();
+    if (currentLocation.country) {
+        // We already have a country (from prefetch/IP). Render immediately.
+        await loadLeaderboard();
+
+        // Still run geolocation in the background to refine location data.
+        getUserLocation()
+            .then(() => loadLeaderboard(true))
+            .catch((error) => console.warn('Geolocation background fetch failed:', error));
+    } else {
+        // No cached country yet, fall back to regular flow.
+        await getUserLocation();
+        await loadLeaderboard();
+    }
 
     // Setup auto-refresh
     setupAutoRefresh();
@@ -111,6 +165,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Get user's location using Geolocation API
 async function getUserLocation() {
+    const cachedLocation = getCachedLocation();
+    if (cachedLocation) {
+        currentLocation.latitude = cachedLocation.latitude || null;
+        currentLocation.longitude = cachedLocation.longitude || null;
+        if (cachedLocation.country) {
+            currentLocation.country = normalizeCountryName(cachedLocation.country);
+        }
+        updateLocationInfo();
+        return;
+    }
+
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
             showError('Geolocation is not supported by your browser.');
@@ -128,6 +193,13 @@ async function getUserLocation() {
 
                 // Update location info display
                 updateLocationInfo();
+
+                // Cache for reuse on other pages
+                storeLocationCache({
+                    latitude: currentLocation.latitude,
+                    longitude: currentLocation.longitude,
+                    country: currentLocation.country
+                });
 
                 resolve();
             },
@@ -200,6 +272,10 @@ async function getLocationFromIP() {
 
         // Update location info display
         updateLocationInfo();
+
+        storeLocationCache({
+            country: currentLocation.country || null
+        });
     } catch (error) {
         console.error('IP geolocation error:', error);
         currentLocation.country = 'Unknown';
@@ -452,3 +528,66 @@ function escapeHtml(text) {
 
 // Make loadLeaderboard available globally for retry button
 window.loadLeaderboard = loadLeaderboard;
+
+// Hydrate leaderboard from background prefetch data (localStorage)
+function hydrateFromPrefetch() {
+    const cachedLocation = getCachedLocation();
+    if (cachedLocation) {
+        currentLocation.latitude = cachedLocation.latitude || currentLocation.latitude;
+        currentLocation.longitude = cachedLocation.longitude || currentLocation.longitude;
+        if (cachedLocation.country) {
+            currentLocation.country = normalizeCountryName(cachedLocation.country);
+        }
+        updateLocationInfo();
+    }
+
+    const prefetched = getPrefetchedPayload();
+    if (!prefetched || !Array.isArray(prefetched.data) || !prefetched.country) {
+        return;
+    }
+
+    // Make sure other scripts can reuse the payload
+    window.__prefetchedLeaderboard = prefetched;
+
+    // Bootstrap cache so loadLeaderboard() can reuse it immediately
+    leaderboardCache = {
+        data: prefetched.data,
+        timestamp: new Date(prefetched.fetchedAt || Date.now()),
+        country: prefetched.country
+    };
+
+    // Approximate last update time based on data freshness info
+    if (prefetched.cacheAgeSeconds) {
+        lastUpdateTime = new Date(
+            (prefetched.fetchedAt || Date.now()) - (prefetched.cacheAgeSeconds * 1000)
+        );
+    } else {
+        lastUpdateTime = new Date(prefetched.fetchedAt || Date.now());
+    }
+
+    // Use prefetched country until geolocation completes
+    if (!currentLocation.country) {
+        currentLocation.country = prefetched.country;
+        updateLocationInfo();
+    }
+
+    displayLeaderboard(prefetched.data);
+    updateLastUpdateDisplay();
+}
+
+function getPrefetchedPayload() {
+    if (window.__prefetchedLeaderboard) {
+        return window.__prefetchedLeaderboard;
+    }
+    try {
+        const raw = localStorage.getItem(PREFETCH_STORAGE_KEY);
+        if (!raw) {
+            return null;
+        }
+        const parsed = JSON.parse(raw);
+        return parsed || null;
+    } catch (error) {
+        console.warn('Unable to read prefetched rankings cache:', error);
+        return null;
+    }
+}
