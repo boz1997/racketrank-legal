@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie Policy | RacketRank</title>
-    <meta name="description" content="Learn about how RacketRank uses cookies and similar technologies.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,30 +50,43 @@
             margin-bottom: 0.5rem;
         }
 
-        .cookie-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2rem 0;
-            background: var(--bg-card);
-            border-radius: 10px;
-            overflow: hidden;
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 140px 1rem 60px;
+            }
+
+            .legal-content h1 {
+                font-size: 2rem;
+            }
+
+            .legal-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 1rem;
+            }
         }
 
-        .cookie-table th,
-        .cookie-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        @media (max-width: 480px) {
+            .legal-content {
+                padding: 120px 0.75rem 40px;
+            }
 
-        .cookie-table th {
-            background: rgba(204, 255, 0, 0.1);
-            color: var(--primary);
-            font-weight: 600;
-        }
+            .legal-content h1 {
+                font-size: 1.75rem;
+            }
 
-        .cookie-table td {
-            color: var(--text-muted);
+            .legal-content h2 {
+                font-size: 1.3rem;
+                margin-top: 2rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -103,99 +115,38 @@
         <h1>Cookie Policy</h1>
         <p>Last updated: November 22, 2026</p>
 
-        <p>This Cookie Policy explains how RacketRank ("we", "us", or "our") uses cookies and similar technologies when
-            you visit our website or use our mobile application.</p>
+        <p>This Cookie Policy explains how RacketRank uses cookies and similar technologies to recognize you when you
+            visit our website and mobile application.</p>
 
-        <h2>1. What Are Cookies?</h2>
-        <p>Cookies are small text files that are placed on your device when you visit a website or use an application.
-            They help us provide you with a better experience by remembering your preferences and understanding how you
-            use our services.</p>
+        <h2>1. What Are Cookies</h2>
+        <p>Cookies are small data files that are placed on your device when you visit a website. Cookies are widely used
+            to make websites work more efficiently and provide information to the owners of the site.</p>
 
-        <h2>2. Types of Cookies We Use</h2>
-
-        <table class="cookie-table">
-            <thead>
-                <tr>
-                    <th>Cookie Type</th>
-                    <th>Purpose</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Essential Cookies</strong></td>
-                    <td>Required for the app to function properly. These include authentication and security cookies.
-                    </td>
-                    <td>Session / 7 days</td>
-                </tr>
-                <tr>
-                    <td><strong>Performance Cookies</strong></td>
-                    <td>Help us understand how users interact with our app to improve performance and user experience.
-                    </td>
-                    <td>30 days</td>
-                </tr>
-                <tr>
-                    <td><strong>Functional Cookies</strong></td>
-                    <td>Remember your preferences and settings to provide a personalized experience.</td>
-                    <td>90 days</td>
-                </tr>
-                <tr>
-                    <td><strong>Analytics Cookies</strong></td>
-                    <td>Collect anonymous data about app usage to help us improve our services.</td>
-                    <td>365 days</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>3. How We Use Cookies</h2>
+        <h2>2. How We Use Cookies</h2>
         <p>We use cookies for the following purposes:</p>
         <ul>
-            <li><strong>Authentication:</strong> To keep you logged in and maintain your session.</li>
-            <li><strong>Preferences:</strong> To remember your settings and preferences.</li>
-            <li><strong>Analytics:</strong> To understand how users interact with our app and identify areas for
-                improvement.</li>
-            <li><strong>Security:</strong> To detect and prevent fraudulent activity and enhance security.</li>
-            <li><strong>Performance:</strong> To optimize app performance and loading times.</li>
+            <li><strong>Essential Cookies:</strong> These cookies are necessary for the website to function properly.
+            </li>
+            <li><strong>Analytics Cookies:</strong> These cookies help us understand how visitors interact with our
+                website.</li>
+            <li><strong>Preference Cookies:</strong> These cookies remember your preferences and settings.</li>
+            <li><strong>Authentication Cookies:</strong> These cookies keep you logged in to your account.</li>
         </ul>
 
-        <h2>4. Third-Party Cookies</h2>
-        <p>We may use third-party services that set cookies on your device. These include:</p>
-        <ul>
-            <li><strong>Analytics Services:</strong> Google Analytics (or similar) to understand user behavior.</li>
-            <li><strong>Authentication Services:</strong> Supabase for secure user authentication.</li>
-            <li><strong>Error Tracking:</strong> Sentry for monitoring and fixing technical issues.</li>
-        </ul>
+        <h2>3. Types of Cookies We Use</h2>
+        <p>We use both session cookies (which expire when you close your browser) and persistent cookies (which stay on
+            your device until deleted or expired).</p>
 
-        <h2>5. Managing Cookies</h2>
-        <p>You can control and manage cookies in several ways:</p>
-        <ul>
-            <li><strong>Browser Settings:</strong> Most web browsers allow you to refuse or delete cookies through their
-                settings.</li>
-            <li><strong>App Settings:</strong> You can manage certain cookie preferences within the RacketRank app
-                settings.</li>
-            <li><strong>Opt-Out Tools:</strong> You can opt out of analytics cookies using tools provided by third-party
-                services.</li>
-        </ul>
+        <h2>4. Managing Cookies</h2>
+        <p>Most web browsers allow you to control cookies through their settings. However, if you disable cookies, some
+            features of our website may not function properly.</p>
 
-        <p><strong>Note:</strong> Disabling essential cookies may affect the functionality of the app and prevent you
-            from using certain features.</p>
+        <h2>5. Third-Party Cookies</h2>
+        <p>We may also use third-party cookies from our analytics and advertising partners. These cookies are subject to
+            the respective privacy policies of these external services.</p>
 
-        <h2>6. Mobile App Tracking</h2>
-        <p>Our mobile app may use device identifiers and similar technologies for analytics and personalization. You can
-            control tracking through your device settings:</p>
-        <ul>
-            <li><strong>iOS:</strong> Settings → Privacy → Tracking</li>
-            <li><strong>Android:</strong> Settings → Google → Ads → Opt out of Ads Personalization</li>
-        </ul>
-
-        <h2>7. Updates to This Policy</h2>
-        <p>We may update this Cookie Policy from time to time to reflect changes in our practices or legal requirements.
-            We will notify you of any significant changes by posting the new policy on this page and updating the "Last
-            updated" date.</p>
-
-        <h2>8. Contact Us</h2>
-        <p>If you have any questions about our use of cookies, please contact us at:</p>
-        <p><a href="mailto:privacy@racketrank.app" style="color: var(--primary);">privacy@racketrank.app</a></p>
+        <h2>6. Contact Us</h2>
+        <p>If you have any questions about our use of cookies, please contact us at support@racketrank.app.</p>
     </div>
 
     <!-- Footer -->
@@ -208,23 +159,6 @@
                         Racket<span>Rank</span>
                     </a>
                     <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="rankings.html">Rankings</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="download.html">Download</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="community.html">Community</a></li>
-                    </ul>
                 </div>
                 <div class="footer-links">
                     <h4>Legal</h4>
@@ -240,7 +174,6 @@
             </div>
         </div>
     </footer>
-
 
 </body>
 

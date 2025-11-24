@@ -18,6 +18,133 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 140px 0 60px !important;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem !important;
+            }
+
+            .hero p {
+                font-size: 1rem !important;
+            }
+
+            .hero-buttons {
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+
+            .hero-buttons .btn {
+                width: 100% !important;
+            }
+
+            .hero-image img {
+                max-width: 200px !important;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr !important;
+                padding: 0 1rem;
+            }
+
+            .requirements-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+                padding: 0 1rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem !important;
+            }
+
+            .section-header {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 120px 0 40px !important;
+            }
+
+            .hero-content {
+                padding: 0 0.75rem;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem !important;
+            }
+
+            .hero p {
+                font-size: 0.95rem !important;
+            }
+
+            .hero-tag {
+                font-size: 0.85rem !important;
+                padding: 0.4rem 1rem !important;
+            }
+
+            .hero-image img {
+                max-width: 180px !important;
+            }
+
+            .section-header h2 {
+                font-size: 1.75rem !important;
+            }
+
+            .features-grid {
+                padding: 0 0.75rem;
+                gap: 1rem !important;
+            }
+
+            .requirements-grid {
+                padding: 0 0.75rem;
+                gap: 1rem !important;
+            }
+
+            .feature-card {
+                padding: 1.25rem !important;
+            }
+
+            .feature-card h3 {
+                font-size: 1.25rem !important;
+            }
+
+            .feature-card p {
+                font-size: 0.95rem !important;
+            }
+
+            .feature-icon {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 1.5rem !important;
+            }
+
+            .section-header {
+                padding: 0 0.75rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -87,7 +214,9 @@
                         <i class="fa-solid fa-trophy"></i>
                     </div>
                     <h3>Track Your Rankings</h3>
-                    <p>See your progress with our proprietary ranking system. Based on match results, player statistics, and competitive performance, our objective system ensures fair ratings recognized worldwide. Compete locally and globally.</p>
+                    <p>See your progress with our proprietary ranking system. Based on match results, player statistics,
+                        and competitive performance, our objective system ensures fair ratings recognized worldwide.
+                        Compete locally and globally.</p>
                 </div>
 
                 <div class="feature-card">
@@ -116,7 +245,7 @@
                 <h2>System Requirements</h2>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 800px; margin: 0 auto;">
+            <div class="requirements-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fa-brands fa-apple"></i>
@@ -213,7 +342,6 @@
             </div>
         </div>
     </footer>
-
 
 </body>
 

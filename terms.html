@@ -49,6 +49,45 @@
         .legal-content li {
             margin-bottom: 0.5rem;
         }
+
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 140px 1rem 60px;
+            }
+
+            .legal-content h1 {
+                font-size: 2rem;
+            }
+
+            .legal-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .legal-content {
+                padding: 120px 0.75rem 40px;
+            }
+
+            .legal-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .legal-content h2 {
+                font-size: 1.3rem;
+                margin-top: 2rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 
@@ -58,17 +97,17 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="index.html" class="logo">
-                <i class="fa-solid fa-circle" style="color: var(--primary);"></i>
+                <img src="assets/ball.png" alt="Tennis Ball" style="width: 32px; height: 32px;">
                 Racket<span>Rank</span>
             </a>
             <div class="nav-links">
-                <a href="index.html#features">Features</a>
-                <a href="index.html#community">Community</a>
-                <a href="index.html#rankings">Rankings</a>
+                <a href="features.html">Features</a>
+                <a href="community.html">Community</a>
+                <a href="rankings.html">Rankings</a>
                 <a href="pricing.html">Pricing</a>
-                <a href="index.html#download">Download</a>
+                <a href="download.html">Download</a>
             </div>
-            <a href="index.html#get-started" class="btn btn-primary">Get Started</a>
+            <a href="download.html" class="btn btn-primary">Get Started</a>
         </div>
     </nav>
 
@@ -76,37 +115,51 @@
         <h1>Terms of Service</h1>
         <p>Last updated: November 22, 2026</p>
 
-        <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the RacketRank mobile
-            application (the "Service") operated by RacketRank ("us", "we", or "our").</p>
+        <p>Welcome to RacketRank. By accessing or using our mobile application and website, you agree to be bound by
+            these Terms of Service.</p>
 
         <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the
-            terms then you may not access the Service.</p>
+        <p>By creating an account or using RacketRank, you acknowledge that you have read, understood, and agree to be
+            bound by these Terms of Service and our Privacy Policy.</p>
 
-        <h2>2. Accounts</h2>
-        <p>When you create an account with us, you must provide us information that is accurate, complete, and current
-            at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination
-            of your account on our Service.</p>
-
-        <h2>3. User Conduct</h2>
-        <p>You agree not to use the Service to:</p>
+        <h2>2. User Accounts</h2>
+        <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities
+            that occur under your account. You agree to:</p>
         <ul>
-            <li>Violate any laws or regulations.</li>
-            <li>Harass, abuse, or harm another person.</li>
-            <li>Submit false match results or manipulate rankings.</li>
-            <li>Upload malicious code or interfere with the Service's functionality.</li>
+            <li>Provide accurate and complete information when creating your account.</li>
+            <li>Keep your account information up to date.</li>
+            <li>Notify us immediately of any unauthorized use of your account.</li>
+            <li>Not share your account with others.</li>
         </ul>
 
-        <h2>4. Termination</h2>
-        <p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any
-            reason whatsoever, including without limitation if you breach the Terms.</p>
+        <h2>3. User Conduct</h2>
+        <p>You agree not to use RacketRank to:</p>
+        <ul>
+            <li>Violate any laws or regulations.</li>
+            <li>Harass, abuse, or harm other users.</li>
+            <li>Post false or misleading information.</li>
+            <li>Interfere with the proper functioning of the service.</li>
+            <li>Attempt to gain unauthorized access to our systems.</li>
+        </ul>
 
-        <h2>5. Changes</h2>
-        <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. What constitutes
-            a material change will be determined at our sole discretion.</p>
+        <h2>4. Subscription and Payments</h2>
+        <p>Some features of RacketRank require a paid subscription. By purchasing a subscription, you agree to pay all
+            applicable fees. Subscriptions automatically renew unless cancelled before the renewal date.</p>
 
-        <h2>6. Contact Us</h2>
-        <p>If you have any questions about these Terms, please contact us at support@racketrank.app.</p>
+        <h2>5. Termination</h2>
+        <p>We reserve the right to suspend or terminate your account at any time for violation of these Terms of Service
+            or for any other reason at our sole discretion.</p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>RacketRank is provided "as is" without warranties of any kind. We are not liable for any damages arising from
+            your use of the service.</p>
+
+        <h2>7. Changes to Terms</h2>
+        <p>We may modify these Terms of Service at any time. Continued use of RacketRank after changes constitutes
+            acceptance of the modified terms.</p>
+
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions about these Terms of Service, please contact us at support@racketrank.app.</p>
     </div>
 
     <!-- Footer -->
@@ -115,7 +168,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="index.html" class="logo">
-                        <i class="fa-solid fa-circle" style="color: var(--primary);"></i>
+                        <img src="assets/ball.png" alt="Tennis Ball" style="width: 28px; height: 28px;">
                         Racket<span>Rank</span>
                     </a>
                     <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
@@ -133,7 +186,6 @@
             </div>
         </div>
     </footer>
-
 
 </body>
 

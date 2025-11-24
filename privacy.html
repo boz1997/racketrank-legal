@@ -49,6 +49,45 @@
         .legal-content li {
             margin-bottom: 0.5rem;
         }
+
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 140px 1rem 60px;
+            }
+
+            .legal-content h1 {
+                font-size: 2rem;
+            }
+
+            .legal-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .legal-content {
+                padding: 120px 0.75rem 40px;
+            }
+
+            .legal-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .legal-content h2 {
+                font-size: 1.3rem;
+                margin-top: 2rem;
+            }
+
+            .legal-content p,
+            .legal-content ul {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 
@@ -58,17 +97,17 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="index.html" class="logo">
-                <i class="fa-solid fa-circle" style="color: var(--primary);"></i>
+                <img src="assets/ball.png" alt="Tennis Ball" style="width: 32px; height: 32px;">
                 Racket<span>Rank</span>
             </a>
             <div class="nav-links">
-                <a href="index.html#features">Features</a>
-                <a href="index.html#community">Community</a>
-                <a href="index.html#rankings">Rankings</a>
+                <a href="features.html">Features</a>
+                <a href="community.html">Community</a>
+                <a href="rankings.html">Rankings</a>
                 <a href="pricing.html">Pricing</a>
-                <a href="index.html#download">Download</a>
+                <a href="download.html">Download</a>
             </div>
-            <a href="index.html#get-started" class="btn btn-primary">Get Started</a>
+            <a href="download.html" class="btn btn-primary">Get Started</a>
         </div>
     </nav>
 
@@ -113,7 +152,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="index.html" class="logo">
-                        <i class="fa-solid fa-circle" style="color: var(--primary);"></i>
+                        <img src="assets/ball.png" alt="Tennis Ball" style="width: 28px; height: 28px;">
                         Racket<span>Rank</span>
                     </a>
                     <p>The #1 platform for racket sports rankings and community. Built for players, by players.</p>
@@ -131,7 +170,6 @@
             </div>
         </div>
     </footer>
-
 
 </body>
 

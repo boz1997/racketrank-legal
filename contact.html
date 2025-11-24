@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | RacketRank</title>
-    <meta name="description"
-        content="Get in touch with the RacketRank team. We're here to help with any questions or feedback.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,47 +26,96 @@
         .contact-content h1 {
             font-size: 3rem;
             margin-bottom: 2rem;
-            text-align: center;
         }
 
-        .contact-grid {
+        .contact-content p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .contact-methods {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            margin: 3rem 0;
+            margin-top: 3rem;
         }
 
         .contact-card {
             background: var(--bg-card);
-            padding: 2.5rem;
-            border-radius: 20px;
+            padding: 2rem;
+            border-radius: 15px;
             border: var(--glass-border);
             text-align: center;
-            transition: var(--transition);
         }
 
-        .contact-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        .contact-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(204, 255, 0, 0.15);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
+        .contact-card i {
+            font-size: 2.5rem;
             color: var(--primary);
-            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
-            .contact-grid {
+            .contact-content {
+                padding: 140px 1rem 60px;
+            }
+
+            .contact-content h1 {
+                font-size: 2rem;
+            }
+
+            .contact-content p {
+                font-size: 1rem;
+            }
+
+            .contact-methods {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .contact-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-content {
+                padding: 120px 0.75rem 40px;
+            }
+
+            .contact-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .contact-content p {
+                font-size: 0.95rem;
+            }
+
+            .contact-methods {
+                gap: 1rem;
+            }
+
+            .contact-card {
+                padding: 1.25rem;
+            }
+
+            .contact-card i {
+                font-size: 2rem;
             }
         }
     </style>
@@ -95,81 +142,27 @@
     </nav>
 
     <div class="container contact-content">
-        <h1>Get in Touch</h1>
-        <p
-            style="text-align: center; font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem; color: var(--text-muted);">
-            Have questions, feedback, or need support? We'd love to hear from you. Our team is here to help.</p>
+        <h1>Contact Us</h1>
+        <p>Have questions or feedback? We'd love to hear from you! Reach out to our team using any of the methods below.
+        </p>
 
-        <div class="contact-grid">
+        <div class="contact-methods">
             <div class="contact-card">
-                <div class="contact-icon">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
-                <h3>Email Support</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">For general inquiries and support</p>
-                <a href="mailto:support@racketrank.app"
-                    style="color: var(--primary); font-weight: 600;">support@racketrank.app</a>
+                <i class="fa-solid fa-envelope"></i>
+                <h3>Email</h3>
+                <p><a href="mailto:support@racketrank.app">support@racketrank.app</a></p>
             </div>
 
             <div class="contact-card">
-                <div class="contact-icon">
-                    <i class="fa-solid fa-bug"></i>
-                </div>
-                <h3>Report a Bug</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Found a technical issue?</p>
-                <a href="mailto:bugs@racketrank.app"
-                    style="color: var(--primary); font-weight: 600;">bugs@racketrank.app</a>
-            </div>
-
-            <div class="contact-card">
-                <div class="contact-icon">
-                    <i class="fa-solid fa-lightbulb"></i>
-                </div>
-                <h3>Feature Requests</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Share your ideas with us</p>
-                <a href="mailto:feedback@racketrank.app"
-                    style="color: var(--primary); font-weight: 600;">feedback@racketrank.app</a>
-            </div>
-
-            <div class="contact-card">
-                <div class="contact-icon">
-                    <i class="fa-solid fa-briefcase"></i>
-                </div>
-                <h3>Business Inquiries</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Partnerships and collaborations</p>
-                <a href="mailto:business@racketrank.app"
-                    style="color: var(--primary); font-weight: 600;">business@racketrank.app</a>
+                <i class="fa-solid fa-comments"></i>
+                <h3>Support</h3>
+                <p>In-app support available 24/7</p>
             </div>
         </div>
 
-        <div class="feature-card" style="margin-top: 3rem; text-align: center;">
-            <h2 style="margin-bottom: 1rem;">Frequently Asked Questions</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Before reaching out, check if your question is
-                answered in our FAQ.</p>
-            <a href="https://racketrank.app/" class="btn btn-outline">View FAQ</a>
-        </div>
-
-        <div style="margin-top: 4rem; text-align: center;">
-            <h2 style="margin-bottom: 1rem;">Response Time</h2>
-            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">We typically respond to all inquiries
-                within 24-48 hours during business days. For urgent issues, please mark your email as "URGENT" in the
-                subject line.</p>
-        </div>
+        <p style="margin-top: 3rem; text-align: center;">We typically respond within 24 hours. For urgent issues, please
+            use the in-app support feature.</p>
     </div>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta-card">
-                <div style="position: relative; z-index: 2;">
-                    <h2>Join Our Community</h2>
-                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Connect with other players,
-                        share tips, and stay updated on the latest RacketRank news.</p>
-                    <a href="download.html" class="btn btn-primary">Download Now</a>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -195,7 +188,7 @@
                     <h4>Company</h4>
                     <ul>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="contact.html" style="color: var(--primary);">Contact</a></li>
                         <li><a href="community.html">Community</a></li>
                     </ul>
                 </div>
@@ -213,7 +206,6 @@
             </div>
         </div>
     </footer>
-
 
 </body>
 
