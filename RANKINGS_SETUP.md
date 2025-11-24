@@ -1,13 +1,24 @@
 # Rankings Sayfası Kurulum Rehberi
 
-Rankings sayfası, kullanıcıların konumlarına göre (ilçe, il, ülke) leaderboard görebilmelerini sağlar.
+Rankings sayfası, kullanıcıların konumlarına göre **ülke bazında** leaderboard görebilmelerini sağlar.
+
+## ⚠️ ÖNEMLİ GÜNCELLEME
+
+**Yeni sistem sadece ülke bazında ranking gösterir!**
+- ❌ İlçe (district) kaldırıldı
+- ❌ Şehir (city) kaldırıldı  
+- ✅ Sadece ülke (country) bazında ranking
+
+Detaylı kurulum için: **COUNTRY_RANKINGS_SETUP.md** dosyasına bakın.
 
 ## Özellikler
-python -m http.server 8000
-- ✅ Konum tabanlı leaderboard (ilçe/il/ülke)
+- ✅ Konum tabanlı leaderboard (**sadece ülke bazında**)
 - ✅ Otomatik konum tespiti (Geolocation API)
+- ✅ **2 saatlik cache mekanizması** (performans optimizasyonu)
+- ✅ **Akıllı ülke ismi normalizasyonu** (Türkiye/Turkey/Turkiye vb.)
+- ✅ **İlk 10 oyuncu** gösterimi
 - ✅ Supabase entegrasyonu
-- ✅ Otomatik güncelleme (15 dakikada bir)
+- ✅ Otomatik güncelleme (2 saatte bir)
 - ✅ Responsive tasarım
 - ✅ Tasarım diline uygun modern UI
 

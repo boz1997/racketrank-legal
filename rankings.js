@@ -1,110 +1,104 @@
-// Rankings Page - Location-based Leaderboard
+// Rankings Page - Country-based Leaderboard
 // Uses backend API instead of direct Supabase connection for security
 
 // Backend API URL
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
 
-// Map English country names to Turkish (database uses Turkish)
-function mapCountryToTurkish(countryName) {
-    const countryMap = {
-        'Turkey': 'Turkiye',
-        'United States': 'Amerika Birleşik Devletleri',
-        'United Kingdom': 'Birleşik Krallık',
-        'Germany': 'Almanya',
-        'France': 'Fransa',
-        'Italy': 'İtalya',
-        'Spain': 'İspanya',
-        'Netherlands': 'Hollanda',
-        'Belgium': 'Belçika',
-        'Greece': 'Yunanistan',
-        'Bulgaria': 'Bulgaristan',
-        'Romania': 'Romanya',
-        'Russia': 'Rusya',
-        'Ukraine': 'Ukrayna',
-        'Poland': 'Polonya',
-        'Czech Republic': 'Çek Cumhuriyeti',
-        'Austria': 'Avusturya',
-        'Switzerland': 'İsviçre',
-        'Sweden': 'İsveç',
-        'Norway': 'Norveç',
-        'Denmark': 'Danimarka',
-        'Finland': 'Finlandiya',
-        'Portugal': 'Portekiz',
-        'Ireland': 'İrlanda',
-        'Canada': 'Kanada',
-        'Australia': 'Avustralya',
-        'New Zealand': 'Yeni Zelanda',
-        'Japan': 'Japonya',
-        'China': 'Çin',
-        'India': 'Hindistan',
-        'Brazil': 'Brezilya',
-        'Argentina': 'Arjantin',
-        'Mexico': 'Meksika',
-        'South Africa': 'Güney Afrika',
-        'Egypt': 'Mısır',
-        'Saudi Arabia': 'Suudi Arabistan',
-        'United Arab Emirates': 'Birleşik Arap Emirlikleri',
-        'Israel': 'İsrail',
-        'Iran': 'İran',
-        'Iraq': 'Irak',
-        'Syria': 'Suriye',
-        'Lebanon': 'Lübnan',
-        'Jordan': 'Ürdün',
-        'Cyprus': 'Kıbrıs',
-        'Azerbaijan': 'Azerbaycan',
-        'Georgia': 'Gürcistan',
-        'Armenia': 'Ermenistan'
-    };
-    
-    // Check exact match first
-    if (countryMap[countryName]) {
-        return countryMap[countryName];
+// Normalize country names to handle variants
+function normalizeCountryName(countryName) {
+    if (!countryName) return null;
+
+    const normalized = countryName.toLowerCase().trim();
+
+    // Turkey variants
+    if (['turkey', 'türkiye', 'turkiye', 'tr'].includes(normalized)) {
+        return 'Turkey';
     }
-    
-    // Check case-insensitive match
-    const lowerCountry = countryName.toLowerCase();
-    for (const [en, tr] of Object.entries(countryMap)) {
-        if (en.toLowerCase() === lowerCountry) {
-            return tr;
-        }
+
+    // USA variants
+    if (['usa', 'united states', 'united states of america', 'amerika birleşik devletleri',
+        'amerika birlesik devletleri', 'us', 'u.s.a.', 'u.s.'].includes(normalized)) {
+        return 'United States';
     }
-    
-    // If no mapping found, return original (might already be Turkish)
-    return countryName;
+
+    // UK variants
+    if (['uk', 'united kingdom', 'birleşik krallık', 'birlesik krallik',
+        'great britain', 'england'].includes(normalized)) {
+        return 'United Kingdom';
+    }
+
+    // Germany variants
+    if (['germany', 'deutschland', 'almanya', 'de'].includes(normalized)) {
+        return 'Germany';
+    }
+
+    // France variants
+    if (['france', 'fransa', 'fr'].includes(normalized)) {
+        return 'France';
+    }
+
+    // Spain variants
+    if (['spain', 'españa', 'ispanya', 'es'].includes(normalized)) {
+        return 'Spain';
+    }
+
+    // Italy variants
+    if (['italy', 'italia', 'italya', 'it'].includes(normalized)) {
+        return 'Italy';
+    }
+
+    // Netherlands variants
+    if (['netherlands', 'holland', 'hollanda', 'nl'].includes(normalized)) {
+        return 'Netherlands';
+    }
+
+    // Greece variants
+    if (['greece', 'yunanistan', 'gr'].includes(normalized)) {
+        return 'Greece';
+    }
+
+    // Canada variants
+    if (['canada', 'kanada', 'ca'].includes(normalized)) {
+        return 'Canada';
+    }
+
+    // Australia variants
+    if (['australia', 'avustralya', 'au'].includes(normalized)) {
+        return 'Australia';
+    }
+
+    // Brazil variants
+    if (['brazil', 'brasil', 'brezilya', 'br'].includes(normalized)) {
+        return 'Brazil';
+    }
+
+    // If no match found, return capitalized version
+    return countryName.charAt(0).toUpperCase() + countryName.slice(1).toLowerCase();
 }
 
 // Current location data
 let currentLocation = {
     latitude: null,
     longitude: null,
-    district: null,
-    city: null,
     country: null
 };
 
-// Current leaderboard level
-let currentLevel = 'district'; // 'district', 'city', 'country'
-
-// Update interval (15 minutes = 900000 ms, 1 hour = 3600000 ms)
-const UPDATE_INTERVAL = 15 * 60 * 1000; // 15 minutes
+// Update interval (2 hours = 7200000 ms)
+const UPDATE_INTERVAL = 2 * 60 * 60 * 1000; // 2 hours
 
 // Last update timestamp
 let lastUpdateTime = null;
 let updateTimer = null;
 
-// Cache for leaderboard data (15 minutes)
+// Cache for leaderboard data (2 hours)
 let leaderboardCache = {
     data: null,
     timestamp: null,
-    level: null,
-    location: null
+    country: null
 };
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    // Setup location selector buttons
-    setupLocationSelector();
-
     // Get user location
     await getUserLocation();
 
@@ -114,23 +108,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Setup auto-refresh
     setupAutoRefresh();
 });
-
-// Setup location selector buttons
-function setupLocationSelector() {
-    const buttons = document.querySelectorAll('.location-btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Remove active class from all buttons
-            buttons.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            btn.classList.add('active');
-            // Update current level
-            currentLevel = btn.dataset.level;
-            // Reload leaderboard (force refresh when switching levels)
-            loadLeaderboard(true);
-        });
-    });
-}
 
 // Get user's location using Geolocation API
 async function getUserLocation() {
@@ -146,12 +123,12 @@ async function getUserLocation() {
                 currentLocation.latitude = position.coords.latitude;
                 currentLocation.longitude = position.coords.longitude;
 
-                // Reverse geocode to get location names
+                // Reverse geocode to get country
                 await reverseGeocode(currentLocation.latitude, currentLocation.longitude);
-                
-                // Update location info display and buttons
+
+                // Update location info display
                 updateLocationInfo();
-                
+
                 resolve();
             },
             (error) => {
@@ -168,7 +145,7 @@ async function getUserLocation() {
     });
 }
 
-// Reverse geocode coordinates to get district, city, country
+// Reverse geocode coordinates to get country
 async function reverseGeocode(lat, lng) {
     try {
         // Using OpenStreetMap Nominatim API (free, no API key required)
@@ -186,36 +163,21 @@ async function reverseGeocode(lat, lng) {
         }
 
         const data = await response.json();
-        
-        // Log the full Nominatim API response
-        console.log('📍 Full Nominatim API response:', JSON.stringify(data, null, 2));
-        
+
+        console.log('📍 Nominatim API response:', data);
+
         const address = data.address || {};
 
-        // Extract location information
-        // Türkiye için hiyerarşi: ilçe (district) → il (city) → ülke (country)
-        // Nominatim API'den: town = ilçe, province = il, country = ülke
-        // district = ilçe (örn: Marmaris)
-        currentLocation.district = address.town || 'Unknown';
-        // city = il (örn: Muğla)
-        currentLocation.city = address.province || 'Unknown';
-        // country = ülke (örn: Türkiye)
+        // Extract and normalize country
         const countryName = address.country || 'Unknown';
-        currentLocation.country = mapCountryToTurkish(countryName);
-        
-        console.log('✅ Parsed location:', {
-            district: currentLocation.district,
-            city: currentLocation.city,
-            country: currentLocation.country
-        });
+        currentLocation.country = normalizeCountryName(countryName);
 
-        // Update location info display and buttons
+        console.log('✅ Detected country:', currentLocation.country);
+
+        // Update location info display
         updateLocationInfo();
     } catch (error) {
         console.error('Reverse geocoding error:', error);
-        // Set default values
-        currentLocation.district = 'Unknown';
-        currentLocation.city = 'Unknown';
         currentLocation.country = 'Unknown';
     }
 }
@@ -230,113 +192,51 @@ async function getLocationFromIP() {
             throw new Error('IP geolocation failed');
         }
 
-        // IP-based geolocation: city = ilçe, region = il, country_name = ülke
-        // district = ilçe (IP'den tam bilgi yok, city kullanıyoruz)
-        currentLocation.district = data.city || 'Unknown';
-        // city = il (region)
-        currentLocation.city = data.region || data.region_code || 'Unknown';
-        // country = ülke
+        // Normalize country name
         const countryName = data.country_name || 'Unknown';
-        currentLocation.country = mapCountryToTurkish(countryName);
+        currentLocation.country = normalizeCountryName(countryName);
 
-        // Update location info display and buttons
+        console.log('✅ IP-based country:', currentLocation.country);
+
+        // Update location info display
         updateLocationInfo();
     } catch (error) {
         console.error('IP geolocation error:', error);
-        currentLocation.district = 'Unknown';
-        currentLocation.city = 'Unknown';
         currentLocation.country = 'Unknown';
     }
 }
 
 // Update location info display
 function updateLocationInfo() {
-    const locationInfo = document.getElementById('locationInfo');
-    const locationName = document.getElementById('locationName');
-
-    if (!locationInfo || !locationName) return;
-
-    let locationText = '';
-    switch (currentLevel) {
-        case 'district':
-            locationText = currentLocation.district;
-            break;
-        case 'city':
-            locationText = currentLocation.city;
-            break;
-        case 'country':
-            locationText = currentLocation.country;
-            break;
-    }
-
-    locationName.textContent = locationText;
-    locationInfo.style.display = 'block';
-
-    // Update button labels with actual location names
-    updateLocationButtons();
-}
-
-// Update location button labels with actual location names
-function updateLocationButtons() {
-    const districtBtn = document.getElementById('districtBtn');
-    const cityBtn = document.getElementById('cityBtn');
     const countryBtn = document.getElementById('countryBtn');
 
-    console.log('Updating buttons with location:', currentLocation);
-
-    if (districtBtn) {
-        const districtName = districtBtn.querySelector('.btn-location-name');
-        if (districtName) {
-            if (currentLocation.district && currentLocation.district !== 'Unknown') {
-                districtName.textContent = currentLocation.district;
-            } else {
-                districtName.textContent = 'District';
-            }
-        }
-    }
-
-    if (cityBtn) {
-        const cityName = cityBtn.querySelector('.btn-location-name');
-        if (cityName) {
-            if (currentLocation.city && currentLocation.city !== 'Unknown') {
-                cityName.textContent = currentLocation.city;
-            } else {
-                cityName.textContent = 'City';
-            }
-        }
-    }
-
     if (countryBtn) {
-        const countryName = countryBtn.querySelector('.btn-location-name');
-        if (countryName) {
+        const countryNameSpan = countryBtn.querySelector('.btn-location-name');
+        if (countryNameSpan) {
             if (currentLocation.country && currentLocation.country !== 'Unknown') {
-                countryName.textContent = currentLocation.country;
+                countryNameSpan.textContent = currentLocation.country;
             } else {
-                countryName.textContent = 'Country';
+                countryNameSpan.textContent = 'Country';
             }
         }
     }
 }
 
-// Load leaderboard from backend API (with 15-minute cache)
+// Load leaderboard from backend API (with 2-hour cache)
 async function loadLeaderboard(forceRefresh = false) {
-    // Check if location is Unknown - show empty state immediately
-    const locationKey = currentLevel === 'district' ? currentLocation.district :
-                       currentLevel === 'city' ? currentLocation.city :
-                       currentLocation.country;
-    
-    if (!locationKey || locationKey === 'Unknown') {
-        console.log('⚠️  Location is Unknown, showing empty state');
+    // Check if country is Unknown - show empty state immediately
+    if (!currentLocation.country || currentLocation.country === 'Unknown') {
+        console.log('⚠️  Country is Unknown, showing empty state');
         showEmpty();
         return;
     }
 
     // Check cache first (unless force refresh)
-    const cacheKey = `${currentLevel}-${currentLocation.district}-${currentLocation.city}-${currentLocation.country}`;
     const now = new Date();
-    
-    if (!forceRefresh && leaderboardCache.data && leaderboardCache.level === currentLevel && 
-        leaderboardCache.location === cacheKey && leaderboardCache.timestamp) {
+
+    if (!forceRefresh && leaderboardCache.data &&
+        leaderboardCache.country === currentLocation.country &&
+        leaderboardCache.timestamp) {
         const cacheAge = now - leaderboardCache.timestamp;
         if (cacheAge < UPDATE_INTERVAL) {
             // Use cached data
@@ -351,49 +251,27 @@ async function loadLeaderboard(forceRefresh = false) {
     showLoading();
 
     try {
-        // Update title with actual location name
+        // Update title with country name
         const title = document.getElementById('leaderboardTitle');
         if (title) {
-            let locationName = '';
-            switch (currentLevel) {
-                case 'district':
-                    locationName = currentLocation.district && currentLocation.district !== 'Unknown' 
-                        ? currentLocation.district 
-                        : 'District';
-                    break;
-                case 'city':
-                    locationName = currentLocation.city && currentLocation.city !== 'Unknown' 
-                        ? currentLocation.city 
-                        : 'City';
-                    break;
-                case 'country':
-                    locationName = currentLocation.country && currentLocation.country !== 'Unknown' 
-                        ? currentLocation.country 
-                        : 'Country';
-                    break;
-            }
-            title.textContent = `${locationName} Rankings`;
+            const countryName = currentLocation.country && currentLocation.country !== 'Unknown'
+                ? currentLocation.country
+                : 'Country';
+            title.textContent = `${countryName} Rankings`;
         }
 
-        // Build API URL with query parameters (include lat/lng for cache lookup)
+        // Build API URL with query parameters
         const params = new URLSearchParams({
-            level: currentLevel,
-            district: currentLocation.district || '',
-            city: currentLocation.city || '',
-            country: currentLocation.country || ''
+            country: currentLocation.country
         });
-        
-        // Add coordinates for cache lookup if available
+
+        // Add coordinates for better geocoding if available
         if (currentLocation.latitude && currentLocation.longitude) {
             params.append('lat', currentLocation.latitude);
             params.append('lng', currentLocation.longitude);
         }
 
-        console.log(`🔍 Fetching leaderboard for ${currentLevel}:`, {
-            district: currentLocation.district,
-            city: currentLocation.city,
-            country: currentLocation.country
-        });
+        console.log(`🔍 Fetching leaderboard for country: ${currentLocation.country}`);
 
         // Call backend API
         const response = await fetch(`${API_BASE_URL}/api/rankings?${params.toString()}`);
@@ -413,12 +291,19 @@ async function loadLeaderboard(forceRefresh = false) {
         leaderboardCache = {
             data: result.data,
             timestamp: now,
-            level: currentLevel,
-            location: cacheKey
+            country: currentLocation.country
         };
 
-        // Update last update time
-        lastUpdateTime = now;
+        // Update last update time based on cache status
+        if (result.cached && result.cache_age_seconds) {
+            // Data is from cache - calculate when it was originally fetched
+            lastUpdateTime = new Date(now.getTime() - (result.cache_age_seconds * 1000));
+            console.log(`📦 Using cached data (${result.cache_age_seconds}s old)`);
+        } else {
+            // Fresh data
+            lastUpdateTime = now;
+            console.log(`✅ Fresh data loaded`);
+        }
         updateLastUpdateDisplay();
 
         // Display leaderboard
@@ -443,7 +328,7 @@ function displayLeaderboard(data) {
     data.forEach((player, index) => {
         const rank = index + 1;
         const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
-        
+
         // Format player name: first_name + last_name (first letter only, rest ***)
         const firstName = player.first_name || '';
         let lastName = '';
@@ -451,11 +336,11 @@ function displayLeaderboard(data) {
             lastName = player.last_name.charAt(0) + '***';
         }
         const playerName = `${firstName} ${lastName}`.trim() || 'Anonymous';
-        
+
         // Get avatar URL or use default
         const avatarUrl = player.avatar_url || '';
         const rating = player.rating || 0;
-        
+
         // Get initials for default avatar
         const initials = (firstName.charAt(0) || '').toUpperCase() + ((player.last_name && player.last_name.length > 0) ? player.last_name.charAt(0).toUpperCase() : '');
 
@@ -544,9 +429,9 @@ function setupAutoRefresh() {
         clearInterval(updateTimer);
     }
 
-    // Update every UPDATE_INTERVAL milliseconds (force refresh to bypass cache)
+    // Update every UPDATE_INTERVAL milliseconds (2 hours)
     updateTimer = setInterval(() => {
-        console.log('🔄 Auto-refreshing leaderboard (15 min interval)...');
+        console.log('🔄 Auto-refreshing leaderboard (2 hour interval)...');
         loadLeaderboard(true); // Force refresh to bypass cache
     }, UPDATE_INTERVAL);
 

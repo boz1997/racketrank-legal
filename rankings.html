@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rankings | RacketRank</title>
-    <meta name="description" content="View local and global rankings. See where you stand in your district, city, and country.">
+    <meta name="description" content="View global country rankings. See where you stand among players in your country.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .rankings-hero {
-            padding: 180px 0 80px;
+            padding: 180px 0 30px;
             text-align: center;
         }
 
@@ -30,65 +30,26 @@
         .rankings-hero p {
             font-size: 1.2rem;
             max-width: 700px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 0.5rem;
         }
 
-        .location-selector {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-        }
-
-        .location-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-card);
-            border: var(--glass-border);
-            border-radius: 50px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            font-weight: 600;
+        .rankings-hero .download-cta {
+            margin-top: 1.5rem;
             font-size: 0.95rem;
-        }
-
-        .location-btn:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .location-btn.active {
-            background: rgba(204, 255, 0, 0.15);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .location-info {
-            text-align: center;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: var(--bg-card);
-            border-radius: 15px;
-            border: var(--glass-border);
-            backdrop-filter: blur(10px);
-        }
-
-        .location-info p {
-            margin: 0;
             color: var(--text-muted);
         }
 
-        .location-info .location-name {
+        .rankings-hero .download-cta i {
             color: var(--primary);
-            font-weight: 600;
-            font-size: 1.1rem;
+        }
+
+        .rankings-hero .download-cta a {
+            color: var(--primary);
+            text-decoration: underline;
         }
 
         .leaderboard-section {
-            padding: 10px 0 10px;
+            padding: 20px 0 60px;
         }
 
         .leaderboard-card {
@@ -228,7 +189,6 @@
             text-align: right;
         }
 
-
         .loading-state,
         .error-state,
         .empty-state {
@@ -272,16 +232,7 @@
 
         @media (max-width: 768px) {
             .rankings-hero {
-                padding: 140px 0 60px;
-            }
-
-            .location-selector {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .location-btn {
-                width: 100%;
+                padding: 140px 0 30px;
             }
 
             .leaderboard-card {
@@ -293,21 +244,11 @@
                 align-items: flex-start;
                 gap: 1rem;
             }
-
-            .leaderboard-table {
-                font-size: 0.9rem;
-            }
-
-            .leaderboard-table th,
-            .leaderboard-table td {
-                padding: 0.75rem 0.5rem;
-            }
-
         }
 
         @media (max-width: 480px) {
             .rankings-hero {
-                padding: 120px 0 40px;
+                padding: 120px 0 20px;
             }
 
             .leaderboard-item {
@@ -363,21 +304,12 @@
     <header class="rankings-hero">
         <div class="container">
             <h1>Global Rankings</h1>
-            <p>See where you stand among players in your district, city, and country. Rankings update automatically to reflect the latest match results.</p>
-            
-            <div class="location-selector">
-                <button class="location-btn active" data-level="district" id="districtBtn">
-                    <i class="fa-solid fa-map-marker-alt"></i> <span class="btn-location-name">District</span>
-                </button>
-                <button class="location-btn" data-level="city" id="cityBtn">
-                    <i class="fa-solid fa-city"></i> <span class="btn-location-name">City</span>
-                </button>
-                <button class="location-btn" data-level="country" id="countryBtn">
-                    <i class="fa-solid fa-globe"></i> <span class="btn-location-name">Country</span>
-                </button>
-            </div>
+            <p>See where you stand among players in your country.</p>
 
-            
+            <p class="download-cta">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                Want to see district and city rankings? <a href="download.html">Download the app</a>
+            </p>
         </div>
     </header>
 
@@ -386,7 +318,7 @@
         <div class="container">
             <div class="leaderboard-card">
                 <div class="leaderboard-header">
-                    <h2 id="leaderboardTitle">District Rankings</h2>
+                    <h2 id="leaderboardTitle">Country Rankings</h2>
                     <div class="update-info">
                         <i class="fa-solid fa-clock"></i>
                         <span id="lastUpdate">Loading...</span>
@@ -409,7 +341,8 @@
             <div class="cta-card">
                 <div style="position: relative; z-index: 2;">
                     <h2>Join the Competition</h2>
-                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Download RacketRank and start climbing the leaderboard today.</p>
+                    <p style="max-width: 600px; margin: 1rem auto 2rem; color: #cbd5e1;">Download RacketRank and start
+                        climbing the leaderboard today.</p>
                     <a href="download.html" class="btn btn-primary">Download Now</a>
                 </div>
             </div>
@@ -471,7 +404,7 @@
             window.API_BASE_URL = window.location.origin;
         }
     </script>
-    
+
     <!-- Rankings Script -->
     <script src="rankings.js"></script>
 

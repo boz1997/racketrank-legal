@@ -41,131 +41,164 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 console.log('✅ Supabase client initialized');
 
+// Normalize country names to handle variants
+function normalizeCountryName(countryName) {
+    if (!countryName) return null;
+
+    const normalized = countryName.toLowerCase().trim();
+
+    // Turkey variants
+    if (['turkey', 'türkiye', 'turkiye', 'tr'].includes(normalized)) {
+        return 'Turkey';
+    }
+
+    // USA variants
+    if (['usa', 'united states', 'united states of america', 'amerika birleşik devletleri',
+        'amerika birlesik devletleri', 'us', 'u.s.a.', 'u.s.'].includes(normalized)) {
+        return 'United States';
+    }
+
+    // UK variants
+    if (['uk', 'united kingdom', 'birleşik krallık', 'birlesik krallik',
+        'great britain', 'england'].includes(normalized)) {
+        return 'United Kingdom';
+    }
+
+    // Germany variants
+    if (['germany', 'deutschland', 'almanya', 'de'].includes(normalized)) {
+        return 'Germany';
+    }
+
+    // France variants
+    if (['france', 'fransa', 'fr'].includes(normalized)) {
+        return 'France';
+    }
+
+    // Spain variants
+    if (['spain', 'españa', 'ispanya', 'es'].includes(normalized)) {
+        return 'Spain';
+    }
+
+    // Italy variants
+    if (['italy', 'italia', 'italya', 'it'].includes(normalized)) {
+        return 'Italy';
+    }
+
+    // Netherlands variants
+    if (['netherlands', 'holland', 'hollanda', 'nl'].includes(normalized)) {
+        return 'Netherlands';
+    }
+
+    // Greece variants
+    if (['greece', 'yunanistan', 'gr'].includes(normalized)) {
+        return 'Greece';
+    }
+
+    // Canada variants
+    if (['canada', 'kanada', 'ca'].includes(normalized)) {
+        return 'Canada';
+    }
+
+    // Australia variants
+    if (['australia', 'avustralya', 'au'].includes(normalized)) {
+        return 'Australia';
+    }
+
+    // Brazil variants
+    if (['brazil', 'brasil', 'brezilya', 'br'].includes(normalized)) {
+        return 'Brazil';
+    }
+
+    // If no match found, return capitalized version
+    return countryName.charAt(0).toUpperCase() + countryName.slice(1).toLowerCase();
+}
+
+// Get country variants for fuzzy matching in database
+function getCountryVariants(normalizedCountry) {
+    const variantsMap = {
+        'Turkey': ['Turkey', 'Türkiye', 'Turkiye', 'turkey', 'türkiye', 'turkiye'],
+        'United States': ['United States', 'USA', 'United States of America', 'Amerika Birleşik Devletleri',
+            'Amerika Birlesik Devletleri', 'US', 'U.S.A.', 'U.S.'],
+        'United Kingdom': ['United Kingdom', 'UK', 'Birleşik Krallık', 'Birlesik Krallik',
+            'Great Britain', 'England'],
+        'Germany': ['Germany', 'Deutschland', 'Almanya'],
+        'France': ['France', 'Fransa'],
+        'Spain': ['Spain', 'España', 'Ispanya'],
+        'Italy': ['Italy', 'Italia', 'Italya'],
+        'Netherlands': ['Netherlands', 'Holland', 'Hollanda'],
+        'Greece': ['Greece', 'Yunanistan'],
+        'Canada': ['Canada', 'Kanada'],
+        'Australia': ['Australia', 'Avustralya'],
+        'Brazil': ['Brazil', 'Brasil', 'Brezilya']
+    };
+
+    return variantsMap[normalizedCountry] || [normalizedCountry];
+}
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'RacketRank API is running' });
 });
 
-// Rankings endpoint
+// Country Rankings endpoint (with 2-hour cache)
 app.get('/api/rankings', async (req, res) => {
     try {
-        const { level, district, city, country } = req.query;
+        let { country, lat, lng } = req.query;
 
-        // Validate level parameter
-        if (!level || !['district', 'city', 'country'].includes(level)) {
-            return res.status(400).json({ 
-                error: 'Invalid level parameter. Must be: district, city, or country' 
+        // Validate country parameter
+        if (!country || country === 'Unknown') {
+            return res.status(400).json({
+                error: 'Invalid country parameter',
+                message: 'Country is required and cannot be "Unknown"'
             });
         }
 
-        // Build query
-        // Note: profiles table uses 'id' (not 'Oid'), 'region' (not 'district')
+        // Normalize country name
+        const normalizedCountry = normalizeCountryName(country);
+        console.log(`🌍 Normalized country: "${country}" → "${normalizedCountry}"`);
+
+        // Check cache first (2 hours)
+        const { data: cachedRankings, error: cacheError } = await supabase
+            .from('country_rankings_cache')
+            .select('*')
+            .eq('country', normalizedCountry)
+            .gt('expires_at', new Date().toISOString())
+            .single();
+
+        if (!cacheError && cachedRankings) {
+            console.log(`📦 Cache HIT for country: ${normalizedCountry}`);
+            console.log(`   Cache age: ${Math.round((new Date() - new Date(cachedRankings.updated_at)) / 1000)}s`);
+
+            return res.json({
+                success: true,
+                country: normalizedCountry,
+                count: cachedRankings.rankings.length,
+                data: cachedRankings.rankings,
+                cached: true,
+                cache_age_seconds: Math.round((new Date() - new Date(cachedRankings.updated_at)) / 1000)
+            });
+        }
+
+        console.log(`🔄 Cache MISS for country: ${normalizedCountry} - Fetching from database...`);
+
+        // Get country variants for fuzzy matching
+        const countryVariants = getCountryVariants(normalizedCountry);
+        console.log(`   Searching for variants: ${countryVariants.join(', ')}`);
+
+        // Build query to find players from this country (using ILIKE for case-insensitive partial match)
         let query = supabase
             .from('profiles')
-            .select('id, first_name, last_name, rating, region, city, country, avatar_url')
+            .select('id, first_name, last_name, rating, country, avatar_url')
             .not('rating', 'is', null)
             .order('rating', { ascending: false })
-            .limit(100);
+            .limit(10); // Top 10 only
 
-        // Map English country names to Turkish (database uses Turkish)
-        function mapCountryToTurkish(countryName) {
-            const countryMap = {
-                'Turkey': 'Turkiye',
-                'United States': 'Amerika Birlesik Devletleri',
-                'United Kingdom': 'Birlesik Krallik',
-                'Germany': 'Almanya',
-                'France': 'Fransa',
-                'Italy': 'Italya',
-                'Spain': 'Ispanya',
-                'Netherlands': 'Hollanda',
-                'Belgium': 'Belcika',
-                'Greece': 'Yunanistan',
-                'Bulgaria': 'Bulgaristan',
-                'Romania': 'Romanya',
-                'Russia': 'Rusya',
-                'Ukraine': 'Ukrayna',
-                'Poland': 'Polonya',
-                'Czech Republic': 'Cek Cumhuriyeti',
-                'Austria': 'Avusturya',
-                'Switzerland': 'Isvicre',
-                'Sweden': 'Isvec',
-                'Norway': 'Norvec',
-                'Denmark': 'Danimarka',
-                'Finland': 'Finlandiya',
-                'Portugal': 'Portekiz',
-                'Ireland': 'Irlanda',
-                'Canada': 'Kanada',
-                'Australia': 'Avustralya',
-                'New Zealand': 'Yeni Zelanda',
-                'Japan': 'Japonya',
-                'China': 'Cin',
-                'India': 'Hindistan',
-                'Brazil': 'Brezilya',
-                'Argentina': 'Arjantin',
-                'Mexico': 'Meksika',
-                'South Africa': 'Guney Afrika',
-                'Egypt': 'Misir',
-                'Saudi Arabia': 'Suudi Arabistan',
-                'United Arab Emirates': 'Birlesik Arap Emirlikleri',
-                'Israel': 'Israil',
-                'Iran': 'Iran',
-                'Iraq': 'Irak',
-                'Syria': 'Suriye',
-                'Lebanon': 'Lubnan',
-                'Jordan': 'Urdun',
-                'Cyprus': 'Kibris',
-                'Azerbaijan': 'Azerbaycan',
-                'Georgia': 'Gurcistan',
-                'Armenia': 'Ermenistan'
-            };
-            
-            if (countryMap[countryName]) {
-                return countryMap[countryName];
-            }
-            
-            const lowerCountry = countryName.toLowerCase();
-            for (const [en, tr] of Object.entries(countryMap)) {
-                if (en.toLowerCase() === lowerCountry) {
-                    return tr;
-                }
-            }
-            
-            return countryName;
-        }
+        // Use OR condition to match any variant
+        const orConditions = countryVariants
+            .map(variant => `country.ilike.%${variant}%`)
+            .join(',');
 
-        // Apply location filter based on level
-        // Use case-insensitive partial matching (ilike) for better results
-        let filterApplied = false;
-        console.log(`🔍 Filtering by ${level}:`, { district, city, country });
-        
-        // Map country name to Turkish if needed
-        let mappedCountry = country;
-        if (country && country !== 'Unknown') {
-            mappedCountry = mapCountryToTurkish(country);
-            if (mappedCountry !== country) {
-                console.log(`🌍 Mapped country: "${country}" → "${mappedCountry}"`);
-            }
-        }
-        
-        if (level === 'district' && district && district !== 'Unknown') {
-            // Use 'region' column instead of 'district'
-            // Case-insensitive partial match
-            query = query.ilike('region', `%${district}%`);
-            filterApplied = true;
-            console.log(`✅ Applied district filter: region ILIKE '%${district}%'`);
-        } else if (level === 'city' && city && city !== 'Unknown') {
-            // Case-insensitive city matching
-            query = query.ilike('city', `%${city}%`);
-            filterApplied = true;
-            console.log(`✅ Applied city filter: city ILIKE '%${city}%'`);
-        } else if (level === 'country' && mappedCountry && mappedCountry !== 'Unknown') {
-            // Case-insensitive country matching with mapped name
-            query = query.ilike('country', `%${mappedCountry}%`);
-            filterApplied = true;
-            console.log(`✅ Applied country filter: country ILIKE '%${mappedCountry}%'`);
-        } else {
-            console.log(`⚠️  No filter applied - level: ${level}, district: ${district}, city: ${city}, country: ${country} (mapped: ${mappedCountry})`);
-        }
+        query = query.or(orConditions);
 
         // Execute query
         let { data, error } = await query;
@@ -173,66 +206,73 @@ app.get('/api/rankings', async (req, res) => {
         if (error) {
             console.error('Supabase error:', error);
             console.error('Error details:', JSON.stringify(error, null, 2));
-            
-            // More specific error messages
-            if (error.message && error.message.includes('Invalid API key')) {
-                console.error('⚠️  API Key Error: Check your SUPABASE_SERVICE_ROLE_KEY in .env file');
-                console.error('Make sure:');
-                console.error('1. You copied the FULL service_role key (not anon key)');
-                console.error('2. Key starts with "eyJ"');
-                console.error('3. No extra spaces or quotes in .env file');
-                console.error('4. .env file is in backend/ directory');
-            }
-            
-            return res.status(500).json({ 
-                error: 'Database error', 
-                message: error.message 
+
+            return res.status(500).json({
+                error: 'Database error',
+                message: error.message
             });
         }
 
         // Log results for debugging
-        console.log(`📊 Query returned ${data ? data.length : 0} results for ${level}`);
+        console.log(`📊 Query returned ${data ? data.length : 0} results for ${normalizedCountry}`);
         if (data && data.length > 0) {
-            console.log('📋 Sample data (first 3):');
+            console.log('📋 Top 3 players:');
             data.slice(0, 3).forEach((p, i) => {
-                console.log(`  ${i + 1}. ${p.first_name} ${p.last_name} - region: "${p.region}", city: "${p.city}", country: "${p.country}"`);
+                console.log(`  ${i + 1}. ${p.first_name} ${p.last_name} - rating: ${p.rating}, country: "${p.country}"`);
             });
-        } else if (filterApplied) {
-            console.log('❌ No results found with filter. Checking database values...');
-            // Check if any data exists at all and what values are in the database
-            const checkQuery = supabase
+        } else {
+            console.log('❌ No results found. Checking database for sample countries...');
+            const { data: sampleData } = await supabase
                 .from('profiles')
-                .select('region, city, country')
+                .select('country')
                 .not('rating', 'is', null)
-                .limit(10);
-            const { data: sampleData } = await checkQuery;
+                .limit(20);
+
             if (sampleData && sampleData.length > 0) {
-                console.log('📋 Sample database values:');
-                const uniqueRegions = [...new Set(sampleData.map(p => p.region).filter(Boolean))];
-                const uniqueCities = [...new Set(sampleData.map(p => p.city).filter(Boolean))];
                 const uniqueCountries = [...new Set(sampleData.map(p => p.country).filter(Boolean))];
-                console.log(`  Regions: ${uniqueRegions.slice(0, 5).join(', ')}`);
-                console.log(`  Cities: ${uniqueCities.slice(0, 5).join(', ')}`);
-                console.log(`  Countries: ${uniqueCountries.slice(0, 5).join(', ')}`);
+                console.log(`📋 Sample countries in database: ${uniqueCountries.slice(0, 10).join(', ')}`);
             }
-            
-            // Don't show global fallback - show empty instead
-            // This helps debug the filtering issue
+        }
+
+        // Cache the results (2 hours expiry)
+        if (data && data.length > 0) {
+            const expiresAt = new Date();
+            expiresAt.setHours(expiresAt.getHours() + 2);
+
+            const { error: cacheInsertError } = await supabase
+                .from('country_rankings_cache')
+                .upsert({
+                    country: normalizedCountry,
+                    country_variants: countryVariants,
+                    rankings: data,
+                    player_count: data.length,
+                    updated_at: new Date().toISOString(),
+                    expires_at: expiresAt.toISOString()
+                }, {
+                    onConflict: 'country'
+                });
+
+            if (cacheInsertError) {
+                console.error('⚠️  Failed to cache rankings:', cacheInsertError.message);
+            } else {
+                console.log(`✅ Cached rankings for ${normalizedCountry} (expires in 2 hours)`);
+            }
         }
 
         // Return data
         res.json({
             success: true,
-            level: level,
+            country: normalizedCountry,
             count: data ? data.length : 0,
-            data: data || []
+            data: data || [],
+            cached: false
         });
 
     } catch (error) {
         console.error('API error:', error);
-        res.status(500).json({ 
-            error: 'Internal server error', 
-            message: error.message 
+        res.status(500).json({
+            error: 'Internal server error',
+            message: error.message
         });
     }
 });
@@ -241,5 +281,5 @@ app.get('/api/rankings', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 RacketRank API server running on http://localhost:${PORT}`);
     console.log(`📊 Rankings endpoint: http://localhost:${PORT}/api/rankings`);
+    console.log(`💡 Example: http://localhost:${PORT}/api/rankings?country=Turkey`);
 });
-
