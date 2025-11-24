@@ -186,6 +186,10 @@ async function reverseGeocode(lat, lng) {
         }
 
         const data = await response.json();
+        
+        // Log the full Nominatim API response
+        console.log('📍 Full Nominatim API response:', JSON.stringify(data, null, 2));
+        
         const address = data.address || {};
 
         // Extract location information

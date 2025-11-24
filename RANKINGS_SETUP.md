@@ -3,7 +3,7 @@
 Rankings sayfası, kullanıcıların konumlarına göre (ilçe, il, ülke) leaderboard görebilmelerini sağlar.
 
 ## Özellikler
-
+python -m http.server 8000
 - ✅ Konum tabanlı leaderboard (ilçe/il/ülke)
 - ✅ Otomatik konum tespiti (Geolocation API)
 - ✅ Supabase entegrasyonu
