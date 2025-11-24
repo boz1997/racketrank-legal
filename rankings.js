@@ -92,6 +92,14 @@ const UPDATE_INTERVAL = 15 * 60 * 1000; // 15 minutes
 let lastUpdateTime = null;
 let updateTimer = null;
 
+// Cache for leaderboard data (15 minutes)
+let leaderboardCache = {
+    data: null,
+    timestamp: null,
+    level: null,
+    location: null
+};
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
     // Setup location selector buttons
@@ -118,8 +126,8 @@ function setupLocationSelector() {
             btn.classList.add('active');
             // Update current level
             currentLevel = btn.dataset.level;
-            // Reload leaderboard
-            loadLeaderboard();
+            // Reload leaderboard (force refresh when switching levels)
+            loadLeaderboard(true);
         });
     });
 }
@@ -181,14 +189,21 @@ async function reverseGeocode(lat, lng) {
         const address = data.address || {};
 
         // Extract location information
-        // Note: Supabase uses 'region' column instead of 'district'
-        // We'll map district to region for filtering
-        currentLocation.district = address.suburb || address.neighbourhood || address.city_district || address.town || 'Unknown';
-        currentLocation.city = address.city || address.town || address.municipality || address.county || 'Unknown';
-        
-        // Map English country names to Turkish (database uses Turkish)
+        // Türkiye için hiyerarşi: ilçe (district) → il (city) → ülke (country)
+        // Nominatim API'den: town = ilçe, province = il, country = ülke
+        // district = ilçe (örn: Marmaris)
+        currentLocation.district = address.town || 'Unknown';
+        // city = il (örn: Muğla)
+        currentLocation.city = address.province || 'Unknown';
+        // country = ülke (örn: Türkiye)
         const countryName = address.country || 'Unknown';
         currentLocation.country = mapCountryToTurkish(countryName);
+        
+        console.log('✅ Parsed location:', {
+            district: currentLocation.district,
+            city: currentLocation.city,
+            country: currentLocation.country
+        });
 
         // Update location info display and buttons
         updateLocationInfo();
@@ -211,10 +226,14 @@ async function getLocationFromIP() {
             throw new Error('IP geolocation failed');
         }
 
-        currentLocation.city = data.city || 'Unknown';
+        // IP-based geolocation: city = ilçe, region = il, country_name = ülke
+        // district = ilçe (IP'den tam bilgi yok, city kullanıyoruz)
+        currentLocation.district = data.city || 'Unknown';
+        // city = il (region)
+        currentLocation.city = data.region || data.region_code || 'Unknown';
+        // country = ülke
         const countryName = data.country_name || 'Unknown';
         currentLocation.country = mapCountryToTurkish(countryName);
-        currentLocation.district = data.city || 'Unknown';
 
         // Update location info display and buttons
         updateLocationInfo();
@@ -295,8 +314,35 @@ function updateLocationButtons() {
     }
 }
 
-// Load leaderboard from backend API
-async function loadLeaderboard() {
+// Load leaderboard from backend API (with 15-minute cache)
+async function loadLeaderboard(forceRefresh = false) {
+    // Check if location is Unknown - show empty state immediately
+    const locationKey = currentLevel === 'district' ? currentLocation.district :
+                       currentLevel === 'city' ? currentLocation.city :
+                       currentLocation.country;
+    
+    if (!locationKey || locationKey === 'Unknown') {
+        console.log('⚠️  Location is Unknown, showing empty state');
+        showEmpty();
+        return;
+    }
+
+    // Check cache first (unless force refresh)
+    const cacheKey = `${currentLevel}-${currentLocation.district}-${currentLocation.city}-${currentLocation.country}`;
+    const now = new Date();
+    
+    if (!forceRefresh && leaderboardCache.data && leaderboardCache.level === currentLevel && 
+        leaderboardCache.location === cacheKey && leaderboardCache.timestamp) {
+        const cacheAge = now - leaderboardCache.timestamp;
+        if (cacheAge < UPDATE_INTERVAL) {
+            // Use cached data
+            console.log(`📦 Using cached leaderboard data (${Math.round(cacheAge / 1000)}s old)`);
+            displayLeaderboard(leaderboardCache.data);
+            updateLastUpdateDisplay();
+            return;
+        }
+    }
+
     // Show loading state
     showLoading();
 
@@ -325,12 +371,24 @@ async function loadLeaderboard() {
             title.textContent = `${locationName} Rankings`;
         }
 
-        // Build API URL with query parameters
+        // Build API URL with query parameters (include lat/lng for cache lookup)
         const params = new URLSearchParams({
             level: currentLevel,
             district: currentLocation.district || '',
             city: currentLocation.city || '',
             country: currentLocation.country || ''
+        });
+        
+        // Add coordinates for cache lookup if available
+        if (currentLocation.latitude && currentLocation.longitude) {
+            params.append('lat', currentLocation.latitude);
+            params.append('lng', currentLocation.longitude);
+        }
+
+        console.log(`🔍 Fetching leaderboard for ${currentLevel}:`, {
+            district: currentLocation.district,
+            city: currentLocation.city,
+            country: currentLocation.country
         });
 
         // Call backend API
@@ -347,8 +405,16 @@ async function loadLeaderboard() {
             throw new Error(result.error || 'Failed to load rankings');
         }
 
+        // Update cache
+        leaderboardCache = {
+            data: result.data,
+            timestamp: now,
+            level: currentLevel,
+            location: cacheKey
+        };
+
         // Update last update time
-        lastUpdateTime = new Date();
+        lastUpdateTime = now;
         updateLastUpdateDisplay();
 
         // Display leaderboard
@@ -474,9 +540,10 @@ function setupAutoRefresh() {
         clearInterval(updateTimer);
     }
 
-    // Update every UPDATE_INTERVAL milliseconds
+    // Update every UPDATE_INTERVAL milliseconds (force refresh to bypass cache)
     updateTimer = setInterval(() => {
-        loadLeaderboard();
+        console.log('🔄 Auto-refreshing leaderboard (15 min interval)...');
+        loadLeaderboard(true); // Force refresh to bypass cache
     }, UPDATE_INTERVAL);
 
     // Also update the "last update" text every minute

@@ -105,13 +105,88 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const { level, district, city, country } = req.query;
+        let { level, district, city, country, lat, lng } = req.query;
 
         // Validate level parameter
         if (!level || !['district', 'city', 'country'].includes(level)) {
             return res.status(400).json({ 
                 error: 'Invalid level parameter. Must be: district, city, or country' 
             });
+        }
+
+        // Check location cache first (1 hour cache) - use coordinates as cache key
+        if (lat && lng) {
+            const cacheKey = `${lat}-${lng}`;
+            const { data: cachedLocation, error: cacheError } = await supabase
+                .from('location_cache')
+                .select('*')
+                .eq('cache_key', cacheKey)
+                .gt('expires_at', new Date().toISOString())
+                .single();
+
+            if (!cacheError && cachedLocation) {
+                console.log(`📦 Using cached location data for: ${cacheKey}`);
+                // Use cached location data
+                const cachedDistrict = cachedLocation.district || district;
+                const cachedCity = cachedLocation.city || city;
+                const cachedCountry = cachedLocation.country || country;
+                
+                // Continue with cached location data
+                district = cachedDistrict;
+                city = cachedCity;
+                country = cachedCountry;
+            } else if (lat && lng) {
+                // Cache miss - fetch from Nominatim and cache it
+                console.log(`🔄 Cache miss, fetching location from Nominatim for: ${cacheKey}`);
+                try {
+                    const nominatimResponse = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+                        {
+                            headers: {
+                                'User-Agent': 'RacketRank/1.0'
+                            }
+                        }
+                    );
+                    
+                    if (nominatimResponse.ok) {
+                        const nominatimData = await nominatimResponse.json();
+                        const address = nominatimData.address || {};
+                        
+                        const parsedDistrict = address.town || district || null;
+                        const parsedCity = address.province || city || null;
+                        const parsedCountry = address.country ? mapCountryToTurkish(address.country) : (country || null);
+                        
+                        // Cache the location data (2 hours expiry)
+                        const expiresAt = new Date();
+                        expiresAt.setHours(expiresAt.getHours() + 2);
+                        
+                        await supabase
+                            .from('location_cache')
+                            .upsert({
+                                cache_key: cacheKey,
+                                district: parsedDistrict,
+                                city: parsedCity,
+                                country: parsedCountry,
+                                latitude: parseFloat(lat),
+                                longitude: parseFloat(lng),
+                                expires_at: expiresAt.toISOString(),
+                                updated_at: new Date().toISOString()
+                            }, {
+                                onConflict: 'cache_key'
+                            });
+                        
+                        console.log(`✅ Cached location data: ${cacheKey}`);
+                        
+                        // Use parsed location
+                        district = parsedDistrict;
+                        city = parsedCity;
+                        country = parsedCountry;
+                    }
+                } catch (nominatimError) {
+                    console.error('Nominatim API error:', nominatimError);
+                    // Continue with provided location data
+                }
+            }
         }
 
         // Build query
