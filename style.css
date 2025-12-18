@@ -232,7 +232,6 @@ p {
     border-radius: 20px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     border: var(--glass-border);
-    animation: float 6s ease-in-out infinite;
 }
 
 .hero-buttons {
